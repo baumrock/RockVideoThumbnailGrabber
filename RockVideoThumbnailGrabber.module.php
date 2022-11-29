@@ -15,7 +15,7 @@ class RockVideoThumbnailGrabber extends WireData implements Module
   {
     return [
       'title' => 'RockVideoThumbnailGrabber',
-      'version' => '1.0.0',
+      'version' => '1.0.1',
       'summary' => 'Grab video thumbnail from YouTube and save it to PW image field',
       'autoload' => true,
       'singular' => true,
@@ -44,9 +44,10 @@ class RockVideoThumbnailGrabber extends WireData implements Module
       if ($img->count()) continue;
 
       // get url of thumbnail
-      if (preg_match("/\?v=(.*)/", $url, $matches)) {
+      parse_str(parse_url($url, PHP_URL_QUERY), $vars);
+      if (array_key_exists('v', $vars)) {
         // youtube url
-        $id = $matches[1];
+        $id = $vars['v'];
         $img->add("https://img.youtube.com/vi/$id/maxresdefault.jpg");
       }
     }
