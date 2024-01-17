@@ -7,7 +7,7 @@ namespace ProcessWire;
  * @license Licensed under MIT
  * @link https://www.baumrock.com
  */
-class RockVideoThumbnailGrabber extends WireData implements Module
+class RockVideoThumbnailGrabber extends WireData implements Module, ConfigurableModule
 {
   private $relations = [];
 
@@ -48,8 +48,30 @@ class RockVideoThumbnailGrabber extends WireData implements Module
       if (array_key_exists('v', $vars)) {
         // youtube url
         $id = $vars['v'];
-        $img->add("https://img.youtube.com/vi/$id/maxresdefault.jpg");
+        foreach ($this->imageNames() as $name) {
+          $img->add("https://img.youtube.com/vi/$id/$name.jpg");
+        }
       }
     }
+  }
+
+  private function imageNames(): array
+  {
+    return array_map('trim', explode(",", $this->youtubeNames));
+  }
+
+  /**
+   * Config inputfields
+   * @param InputfieldWrapper $inputfields
+   */
+  public function getModuleConfigInputfields($inputfields)
+  {
+    $inputfields->add([
+      'type' => 'text',
+      'name' => 'youtubeNames',
+      'label' => 'Youtube-Images to grab',
+      'value' => $this->youtubeNames ?: "maxresdefault, sddefault, hqdefault, mqdefault, default, 0, 1, 2, 3",
+    ]);
+    return $inputfields;
   }
 }
