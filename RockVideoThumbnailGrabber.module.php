@@ -11,6 +11,8 @@ class RockVideoThumbnailGrabber extends WireData implements Module, Configurable
 {
   private $relations = [];
 
+  public $youtubeNames = "maxresdefault, sddefault, hqdefault, mqdefault, default, 0, 1, 2, 3";
+
   public static function getModuleInfo()
   {
     return [
@@ -70,7 +72,7 @@ class RockVideoThumbnailGrabber extends WireData implements Module, Configurable
       'type' => 'text',
       'name' => 'youtubeNames',
       'label' => 'Youtube-Images to grab',
-      'value' => $this->youtubeNames ?: "maxresdefault, sddefault, hqdefault, mqdefault, default, 0, 1, 2, 3",
+      'value' => $this->youtubeNames,
     ]);
     return $inputfields;
   }
