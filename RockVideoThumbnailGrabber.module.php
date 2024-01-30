@@ -51,7 +51,11 @@ class RockVideoThumbnailGrabber extends WireData implements Module, Configurable
         // youtube url
         $id = $vars['v'];
         foreach ($this->imageNames() as $name) {
-          $img->add("https://img.youtube.com/vi/$id/$name.jpg");
+          try {
+            $img->add("https://img.youtube.com/vi/$id/$name.jpg");
+          } catch (\Throwable $th) {
+            $this->error($th->getMessage());
+          }
         }
       }
     }
